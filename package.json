@@ -1,0 +1,42 @@
+{
+  "name": "nuxt-crash-course",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "monitor": "nuxt build --webpackmonitor",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.12.5",
+    "@nuxtjs/webpackmonitor": "^0.1.0",
+    "bootstrap": "^4.6.0",
+    "core-js": "^3.8.3",
+    "lodash.debounce": "^4.0.8",
+    "nuxt": "^2.14.12",
+    "nuxt-babel": "^1.0.1",
+    "nuxt-scss-to-js": "^1.0.4",
+    "vue-lodash": "^2.1.2"
+  },
+  "devDependencies": {
+    "@aceforth/nuxt-optimized-images": "^1.4.0",
+    "@babel/preset-env": "^7.12.11",
+    "@nuxtjs/dotenv": "^1.4.1",
+    "@vue/cli-plugin-babel": "^4.5.11",
+    "@vue/cli-plugin-eslint": "^4.5.11",
+    "@vue/cli-service": "^4.5.11",
+    "babel-eslint": "^10.1.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "eslint": "^7.18.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-vue": "^7.5.0",
+    "node-sass": "^5.0.0",
+    "prettier": "^2.2.1",
+    "sass-loader": "^10.1.1",
+    "vue-template-compiler": "^2.6.12"
+  }
+}
