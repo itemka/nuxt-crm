@@ -1,4 +1,4 @@
-// import webpack from 'webpack'
+import webpack from 'webpack'
 
 export default {
   dev: process.env.NODE_ENV !== 'production',
@@ -15,12 +15,22 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
+      { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/icon?family=Material+Icons',
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['~/node_modules/bootstrap/dist/css/bootstrap.min.css'],
+  css: [
+    '~/node_modules/materialize-css/dist/css/materialize.min.css',
+    '~/assets/scss/index.scss',
+  ],
 
   loading: {
     color: 'green',
@@ -29,8 +39,13 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/vue-lodash.js',
-    // '~/plugins/debounce.js',
+    '~/plugins/message.plugin.client.js',
+    '~/plugins/title.plugin.js',
+    '~/plugins/vue-lodash.plugin.js',
+    '~/filters/currency.filter.js',
+    '~/filters/date.filter.js',
+    '~/filters/localize.filter.js',
+    './directives/tooltip.directive.client.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -40,6 +55,7 @@ export default {
   buildModules: [
     '@aceforth/nuxt-optimized-images',
     '@nuxtjs/dotenv',
+    '@nuxtjs/vuetify',
     //
   ],
 
@@ -57,11 +73,10 @@ export default {
     // analyze: {
     //   analyzerMode: 'static',
     // },
-    // plugins: [
-    // new webpack.ProvidePlugin({
-    //   // global modules
-    //   _: 'lodash',
-    // }),
-    // ],
+    plugins: [
+      new webpack.ProvidePlugin({
+        Materialize: 'materialize-css',
+      }),
+    ],
   },
 }

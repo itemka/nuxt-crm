@@ -1,13 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">{{ 300.222 | currency }}</a>
-      |
-      <a class="navbar-brand" href="#">{{ new Date() | date('datetime') }}</a>
-      |
-      <a class="navbar-brand" href="#" v-tooltip="'adadasda'" v-on:click.prevent="handleClick">
-        {{ 'Create' | localize }}
-      </a>
+      <a class="navbar-brand" href="#">Nuxt SSR</a>
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li
@@ -50,21 +44,7 @@
 </template>
 
 <script>
-import { MESSAGES } from '@/utils/constants'
-
 export default {
-  head() {
-    return {
-      title: this.$getMetaTitle('Menu_History'),
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'Menu History'
-        }
-      ]
-    }
-  },
   data: () => ({
     links: [
       { path: '/', title: 'Home', exact: true, noPrefetch: true },
@@ -81,12 +61,6 @@ export default {
     handleLogout() {
       this.$store.dispatch('logout')
       this.$router.push('/login')
-    },
-    handleClick() {
-
-      if (MESSAGES['auth/user-not-found']) {
-        this.$message(MESSAGES['login'])
-      }
     }
   }
 }
