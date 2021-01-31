@@ -90,9 +90,9 @@
         </button>
       </div>
       <p class="center">
-        {{ 'Message_AlreadyHaveAnAccount' | localize }}? <router-link to="/">{{
+        {{ 'Message_AlreadyHaveAnAccount' | localize }}? <nuxt-link to="/" :no-prefetch="true">{{
           'LogIn' | localize
-        }}!</router-link>
+        }}!</nuxt-link>
       </p>
     </div>
   </form>

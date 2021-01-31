@@ -8,9 +8,9 @@
     <p v-if="!categories.length" class="center">
       {{
         'Message_CategoriesAreEmpty' | localize
-      }} <router-link to="/categories">{{
+      }} <nuxt-link to="/categories" :no-prefetch="true">{{
         'Message_AddNewCategory' | localize
-      }}</router-link>
+      }}</nuxt-link>
     </p>
     <form
       v-else

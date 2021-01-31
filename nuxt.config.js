@@ -43,10 +43,11 @@ export default {
     '~/assets/scss/index.scss',
   ],
 
-  loading: {
-    color: 'green',
-    height: '5px',
-  },
+  // loading: {
+  //   color: 'green',
+  //   height: '5px',
+  // },
+  loading: '~/components/Loader.vue',
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [

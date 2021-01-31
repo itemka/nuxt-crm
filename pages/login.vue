@@ -60,9 +60,9 @@
       <p class="center">
         {{
           'Message_DontHaveAnAccount' | localize
-        }}? <router-link to="/register">{{
+        }}? <nuxt-link to="/register" :no-prefetch="true">{{
           'Message_RegisterNow' | localize
-        }}</router-link>
+        }}</nuxt-link>
       </p>
     </div>
   </form>
