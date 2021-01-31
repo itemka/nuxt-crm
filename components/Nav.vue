@@ -1,5 +1,5 @@
 <template>
-  <!-- <nav class="navbar orange lighten-1">
+  <nav class="navbar orange lighten-1">
     <div class="nav-wrapper">
       <div class="navbar-left">
         <a href="#" v-on:click.prevent="$emit('click-navbar-menu')">
@@ -15,14 +15,14 @@
             data-target="dropdown"
             ref="dropdownRef"
           >
-            {{ userInfo.name }}
+            {{ userName }}
             <i class="material-icons right">arrow_drop_down</i>
           </a>
           <ul id='dropdown' class='dropdown-content'>
             <li>
-              <router-link to="/profile" class="black-text">
+              <nuxt-link to="/profile" class="black-text">
                 <i class="material-icons">account_circle</i>{{ 'Profile' | localize }}
-              </router-link>
+              </nuxt-link>
             </li>
             <li class="divider" tabindex="-1"></li>
             <li>
@@ -38,44 +38,45 @@
         </li>
       </ul>
     </div>
-  </nav> -->
+  </nav>
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
-// import M from 'materialize-css'
+export default {
+  name: 'Nav',
+  data: () => ({
+    date: new Date(),
+    interval: null,
+    dropdown: null
+  }),
+  mounted() {
+    this.interval = setInterval(() => {
+      this.date = new Date()
+    }, 1000)
 
-// export default {
-//   name: 'Nav',
-//   data: () => ({
-//     date: new Date(),
-//     interval: null,
-//     dropdown: null
-//   }),
-//   mounted() {
-//     this.interval = setInterval(() => {
-//       this.date = new Date()
-//     }, 1000)
+    this.dropdown = this.$initMaterializeDropdown(this.$refs.dropdownRef)
+  },
+  beforeDestroy() {
+    clearInterval(this.interval)
 
-//     this.dropdown = M.Dropdown.init(this.$refs.dropdownRef)
-//   },
-//   beforeDestroy() {
-//     clearInterval(this.interval)
-
-//     if (this.dropdown && this.dropdown.destroy) {
-//       this.dropdown.destroy()
-//     }
-//   },
-//   computed: {
-//     ...mapGetters({ userInfo: 'info' }),
-//   },
-//   methods: {
-//     async logout() {
-//       try {
-//         await this.$store.dispatch('logout')
-//         this.$router.push('/login?message=logout')
-//       } catch (error) {}
-//     }
-//   }
-// }
+    if (this.dropdown && this.dropdown.destroy) {
+      this.dropdown.destroy()
+    }
+  },
+  computed: {
+    userName() {
+      return this.$store.getters['info/getInfo'].name || null
+    }
+  },
+  methods: {
+    async logout() {
+      try {
+        await this.$store.dispatch('auth/logout')
+        this.$router.push('/login?message=logout')
+      } catch (error) {
+        console.log('methods logout')
+      }
+    }
+  }
+}
 </script>

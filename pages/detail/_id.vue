@@ -1,9 +1,10 @@
 <template>
-  <!-- <div>
-    <Loader v-if="loading" />
-    <div v-else-if="record" >
+  <div>
+    <!-- <Loader v-if="loading" /> -->
+    <!-- <div v-else-if="record" > -->
+    <div v-if="record" >
       <div class="breadcrumb-wrap">
-        <router-link to="/history" class="breadcrumb">{{ 'History' | localize }}</router-link>
+        <nuxt-link to="/history" class="breadcrumb">{{ 'History' | localize }}</nuxt-link>
         <a class="breadcrumb" v-on:click.prevent>
           {{ (record.type === 'income' ? 'Income' : 'Outcome') | localize }}
         </a>
@@ -36,29 +37,29 @@
         'message_IsNotFound' | localize
       }}
     </p>
-  </div> -->
+  </div>
 </template>
 
 <script>
-// export default {
-//   name: 'Detail',
-//   metaInfo() {
-//     return {
-//       title: this.$getMetaTitle('Title_Detail')
-//     }
-//   },
-//   data: () => ({
-//     loading: true,
-//     record: null
-//   }),
-//   async mounted() {
-//     try {
-//       const record = await this.$store.dispatch('fetchRecordById', this.$route.params.id)
-//       const category = await this.$store.dispatch('fetchCategoryById', record.categoryId)
+export default {
+  name: 'Detail',
+  head() {
+    return {
+      title: this.$getMetaTitle('Title_Detail')
+    }
+  },
+  data: () => ({
+    // loading: true,
+    record: null
+  }),
+  async mounted() {
+    try {
+      const record = await this.$store.dispatch('record/fetchRecordById', this.$route.params.id)
+      const category = await this.$store.dispatch('category/fetchCategoryById', record.categoryId)
 
-//       this.record = { ...record, categoryName: category.title }
-//       this.loading = false
-//     } catch (error) {}
-//   }
-// }
+      this.record = { ...record, categoryName: category.title }
+      // this.loading = false
+    } catch (error) {}
+  }
+}
 </script>

@@ -1,13 +1,24 @@
 import webpack from 'webpack'
+import { getEnvVariables, isDev } from './utils/helper'
+import { FIREBASE_KEY_NAMES } from './utils/constants'
+
+const FIREBASE_CONFIG = getEnvVariables(process.env, FIREBASE_KEY_NAMES)
 
 export default {
-  dev: process.env.NODE_ENV !== 'production',
+  dev: isDev(),
   env: {
     baseURL: process.env.BASE_URL,
   },
+  vue: {
+    config: {
+      productionTip: !isDev(),
+      devtools: isDev(),
+    },
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'nuxt-crash-course | Artyom Pavlenko',
+    title: 'Nuxt CRM | Artyom Pavlenko',
     htmlAttrs: {
       lang: 'en',
     },
@@ -39,13 +50,16 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/message.plugin.client.js',
-    '~/plugins/title.plugin.js',
-    '~/plugins/vue-lodash.plugin.js',
-    '~/filters/currency.filter.js',
-    '~/filters/date.filter.js',
-    '~/filters/localize.filter.js',
-    './directives/tooltip.directive.client.js',
+    { src: '~/plugins/components.js', mode: 'client' },
+    { src: '~/plugins/materialize.js', mode: 'client' },
+    { src: '~/plugins/message.js', mode: 'client' },
+    { src: '~/plugins/meta-title.js' },
+    { src: '~/plugins/vue-lodash.js' },
+    { src: '~/plugins/vuelidate.js' },
+    { src: '~/filters/currency.js' },
+    { src: '~/filters/date.js' },
+    { src: '~/filters/localize.js' },
+    { src: '~/directives/tooltip.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -65,6 +79,24 @@ export default {
     'nuxt-scss-to-js',
     '@nuxtjs/axios',
     // TODO 'nuxt-babel',
+    [
+      '@nuxtjs/firebase',
+      {
+        config: FIREBASE_CONFIG,
+        services: {
+          auth: {
+            initialize: {
+              onAuthStateChangedMutation: 'auth/setCurrentUserId',
+              onAuthStateChangedAction: 'auth/onAuthStateChangedAction',
+              subscribeManually: false,
+            },
+            ssr: true,
+          },
+
+          database: {},
+        },
+      },
+    ],
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

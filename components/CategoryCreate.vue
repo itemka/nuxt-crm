@@ -1,5 +1,5 @@
 <template>
-  <!-- <div class="col s12 m6">
+  <div class="col s12 m6">
     <div>
       <div class="page-subtitle">
         <h4>{{ 'Create' | localize }}</h4>
@@ -40,51 +40,52 @@
         </button>
       </form>
     </div>
-  </div> -->
+  </div>
 </template>
 
 <script>
-// import { required, minValue } from 'vuelidate/lib/validators'
+import { required, minValue } from 'vuelidate/lib/validators'
 // import M from 'materialize-css'
 
-// export default {
-//   data: () => ({
-//     title: '',
-//     limit: 100
-//   }),
-//   validations: {
-//     title: {
-//       required,
-//     },
-//     limit: {
-//       minValue: minValue(100)
-//     }
-//   },
-//   mounted() {
-//     M.updateTextFields()
-//   },
-//   methods: {
-//     async handleSubmit() {
-//       try {
-//         if (this.$v.$invalid) {
-//           this.$v.$touch()
+export default {
+  data: () => ({
+    title: '',
+    limit: 100
+  }),
+  validations: {
+    title: {
+      required,
+    },
+    limit: {
+      minValue: minValue(100)
+    }
+  },
+  mounted() {
+    this.$updateTextFields()
+    // M.updateTextFields()
+  },
+  methods: {
+    async handleSubmit() {
+      try {
+        if (this.$v.$invalid) {
+          this.$v.$touch()
 
-//           return
-//         }
+          return
+        }
 
-//         const formData = {
-//           title: this.title,
-//           limit: this.limit
-//         }
+        const formData = {
+          title: this.title,
+          limit: this.limit
+        }
 
-//         const category = await this.$store.dispatch('createCategory', formData)
-//         this.title = ''
-//         this.limit = 100
-//         this.$v.$reset()
-//         this.$message('Message_CategoryCreated')
-//         this.$emit('created', category)
-//       } catch (error) {}
-//     }
-//   }
-// }
+        const category = await this.$store.dispatch('category/createCategory', formData)
+        this.title = ''
+        this.limit = 100
+        this.$v.$reset()
+        this.$message('Message_CategoryCreated')
+        this.$emit('created', category)
+      } catch (error) {}
+    }
+  }
+}
 </script>

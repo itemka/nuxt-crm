@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { localizeFilter } from '@/filters/localize.filter'
+import { localizeFilter } from '@/filters/localize'
 
 export default function ({ store }) {
   Vue.use({

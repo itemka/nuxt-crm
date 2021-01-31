@@ -1,6 +1,3 @@
-import chunk from 'lodash/chunk'
-import size from 'lodash/size'
-
 export default {
   data: () => ({
     page: 1,
@@ -16,8 +13,8 @@ export default {
     },
     setupPagination(allItems) {
       this.page = +this.$route.query.page || 1
-      this.allItems = chunk(allItems, this.pageSize)
-      this.pageCount = size(this.allItems)
+      this.allItems = this._.chunk(allItems, this.pageSize)
+      this.pageCount = this._.size(this.allItems)
       this.items = this.allItems[this.page - 1] || this.allItems[0]
     },
   },

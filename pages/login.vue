@@ -1,42 +1,128 @@
 <template>
-  <section>
-    <form v-on:submit.prevent="handleSubmit">
-      <div v-if="$route.query.message" class="alert alert-danger mb-3">
-        Need login first
+  <form class="card auth-card" v-on:submit.prevent="handleSubmit">
+    <div class="card-content">
+      <span class="card-title">{{ 'TitleLogin_HomeBookkeeping' | localize }}</span>
+      <div class="input-field">
+        <input
+          id="email"
+          type="text"
+          v-model.trim="email"
+          :class="{ invalid: ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email) }"
+        >
+        <label for="email">{{ 'Email' | localize }}</label>
+        <small
+          class="helper-text invalid"
+          v-if="$v.email.$dirty && !$v.email.required"
+        >
+          {{ 'Message_EmailIsRequiredAndMustNotBeEmpty' | localize }}
+        </small>
+        <small
+          class="helper-text invalid"
+          v-else-if="$v.email.$dirty && !$v.email.email"
+        >
+          {{ 'Message_EnterCorrectEmail' | localize }}
+        </small>
       </div>
-      <h1>Login page</h1>
-      <div class="form-grup">
-        <input type="text" class="form-control">
+      <div class="input-field">
+        <input
+          id="password"
+          type="password"
+          v-model.trim="password"
+          :class="{ invalid: ($v.password.$dirty && !$v.password.required) || ($v.password.$dirty && !$v.password.minLength) }"
+        >
+        <label for="password">{{ 'Password' | localize }}</label>
+        <small
+          class="helper-text invalid"
+          v-if="$v.password.$dirty && !$v.password.required"
+        >
+          {{ 'Message_EnterPassword' | localize }}
+        </small>
+        <small
+          class="helper-text invalid"
+          v-else-if="$v.password.$dirty && !$v.password.minLength"
+        >
+          {{
+            'Message_PasswordMustBeLong' | localize
+          }} {{
+            $v.password.$params.minLength.min
+          }} {{ 'symbol' | localize }}. {{
+            'Now' | localize
+          }} {{ password.length }}
+        </small>
       </div>
-      <p>
-        <nuxt-link to="/">To home page</nuxt-link>
+    </div>
+    <div class="card-action">
+      <div>
+        <button type="submit" class="btn waves-effect waves-light auth-submit">
+          {{ 'LogIn' | localize }} <i class="material-icons right">send</i>
+        </button>
+      </div>
+      <p class="center">
+        {{
+          'Message_DontHaveAnAccount' | localize
+        }}? <router-link to="/register">{{
+          'Message_RegisterNow' | localize
+        }}</router-link>
       </p>
-      <button class="btn btn-primary" type="submit">Login</button>
-    </form>
-  </section>
+    </div>
+  </form>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import { email, required, minLength } from 'vuelidate/lib/validators'
+import { MESSAGES } from '@/utils/constants'
 
 export default {
+  name: 'Login',
   layout: 'empty',
-  methods: {
-    ...mapActions(['login']),
-    handleSubmit() {
-      this.login()
-      this.$router.push('/')
+  head() {
+    return {
+      title: this.$getMetaTitle('LogIn')
     }
   },
-  mounted() {
-
+  data: () => ({
+    email: '',
+    password: ''
+  }),
+  validations: {
+    email: {
+      required,
+      email,
+    },
+    password: {
+      required,
+      minLength: minLength(8)
+    }
   },
+  async mounted() {
+    const queryMesssages = MESSAGES[this.$route.query.message]
+
+    if (queryMesssages) {
+      this.$message(queryMesssages)
+    }
+  },
+  methods: {
+    ...mapActions({
+      login: 'auth/login'
+    }),
+    async handleSubmit() {
+      try {
+        if (this.$v.$invalid) {
+          this.$v.$touch()
+
+          return
+        }
+
+        const formData = {
+          email: this.email,
+          password: this.password
+        }
+
+        await this.login(formData)
+        this.$router.push('/')
+      } catch (error) {}
+    }
+  }
 }
 </script>
-
-<style lang="scss" scoped>
-form {
-  width: 500px;
-  margin: 0 auto;
-}
-</style>

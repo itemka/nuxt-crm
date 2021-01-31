@@ -4,7 +4,8 @@ import 'dayjs/locale/ru'
 
 export default function ({ store }) {
   Vue.filter('date', function (value, format = 'date') {
-    const locale = store.getters['info/getInfo'].locale.substr(0, 2) || 'en'
+    const storeLocale = store.getters['info/getInfo'].locale || null
+    const locale = (storeLocale && storeLocale.substr(0, 2)) || 'en'
     let displayFormat = ''
 
     if (format.includes('date')) {

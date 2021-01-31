@@ -1,5 +1,5 @@
 <template>
-  <!-- <form class="card auth-card" v-on:submit.prevent="handleSubmit">
+  <form class="card auth-card" v-on:submit.prevent="handleSubmit">
     <div class="card-content">
       <span class="card-title">{{ 'Title_HomeBookkeeping' | localize }}</span>
       <div class="input-field">
@@ -95,61 +95,62 @@
         }}!</router-link>
       </p>
     </div>
-  </form> -->
+  </form>
 </template>
 
 <script>
-// import { email, required, minLength } from 'vuelidate/lib/validators'
+import { email, required, minLength } from 'vuelidate/lib/validators'
 
-// export default {
-//   name: 'Register',
-//   metaInfo() {
-//     return {
-//       title: this.$getMetaTitle('Title_HomeBookkeeping')
-//     }
-//   },
-//   data: () => ({
-//     email: '',
-//     password: '',
-//     name: '',
-//     agree: false
-//   }),
-//   validations: {
-//     email: {
-//       required,
-//       email,
-//     },
-//     password: {
-//       required,
-//       minLength: minLength(8)
-//     },
-//     name: {
-//       required,
-//       minLength: minLength(1)
-//     },
-//     agree: {
-//       checked: v => v
-//     }
-//   },
-//   methods: {
-//     async handleSubmit() {
-//       try {
-//         if (this.$v.$invalid) {
-//           this.$v.$touch()
+export default {
+  name: 'Register',
+  layout: 'empty',
+  head() {
+    return {
+      title: this.$getMetaTitle('Title_HomeBookkeeping')
+    }
+  },
+  data: () => ({
+    email: '',
+    password: '',
+    name: '',
+    agree: false
+  }),
+  validations: {
+    email: {
+      required,
+      email,
+    },
+    password: {
+      required,
+      minLength: minLength(8)
+    },
+    name: {
+      required,
+      minLength: minLength(1)
+    },
+    agree: {
+      checked: v => v
+    }
+  },
+  methods: {
+    async handleSubmit() {
+      try {
+        if (this.$v.$invalid) {
+          this.$v.$touch()
 
-//           return
-//         }
+          return
+        }
 
-//         const formData = {
-//           email: this.email,
-//           password: this.password,
-//           name: this.name
-//         }
+        const formData = {
+          email: this.email,
+          password: this.password,
+          name: this.name
+        }
 
-//         await this.$store.dispatch('register', formData)
-//         this.$router.push('/')
-//       } catch (error) {}
-//     }
-//   }
-// }
+        await this.$store.dispatch('auth/register', formData)
+        this.$router.push('/')
+      } catch (error) {}
+    }
+  }
+}
 </script>

@@ -86,6 +86,7 @@ export default {
 
       if (MESSAGES['auth/user-not-found']) {
         this.$message(MESSAGES['login'])
+        this.$message('afafafaf')
       }
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <!-- <table>
+  <table>
     <thead>
     <tr>
       <th>#</th>
@@ -38,23 +38,23 @@
       </td>
     </tr>
     </tbody>
-  </table> -->
+  </table>
 </template>
 
 <script>
-// import localizeFilter from '@/filters/localize.filter'
+import { localizeFilter } from '@/filters/localize'
 
-// export default {
-//   props: {
-//     records: {
-//       type: Array,
-//       required: true
-//     }
-//   },
-//   computed: {
-//     tooltipMessage() {
-//       return localizeFilter('Message_ShowRecord')
-//     }
-//   }
-// }
+export default {
+  props: {
+    records: {
+      type: Array,
+      required: true
+    }
+  },
+  computed: {
+    tooltipMessage() {
+      return localizeFilter(this.$store, 'Message_ShowRecord')
+    }
+  }
+}
 </script>

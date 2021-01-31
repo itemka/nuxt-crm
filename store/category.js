@@ -1,18 +1,11 @@
-import firebase from 'firebase/app'
-
-// export const state = () => ({})
-// export const mutations = {}
-// export const actions = {}
-// export const getters = {}
-
 export const actions = {
   async fetchCategories({ commit, dispatch }) {
     try {
-      const uid = await dispatch('getUserId')
+      // TODO const uid = await dispatch('auth/getUserId')
+      const uid = await this.$fire.auth.currentUser.uid
       const categories =
         (
-          await firebase
-            .database()
+          await this.$fire.database
             .ref(`/users/${uid}/categories`)
             .once('value')
         ).val() || {}
@@ -22,17 +15,18 @@ export const actions = {
         id: key,
       }))
     } catch (error) {
+      console.log(error) // TODO
       commit('setError', error)
       throw error
     }
   },
   async fetchCategoryById({ commit, dispatch }, id) {
     try {
-      const uid = await dispatch('getUserId')
+      // TODO const uid = await dispatch('auth/getUserId')
+      const uid = await this.$fire.auth.currentUser.uid
       const category =
         (
-          await firebase
-            .database()
+          await this.$fire.database
             .ref(`/users/${uid}/categories`)
             .child(id)
             .once('value')
@@ -40,15 +34,16 @@ export const actions = {
 
       return { ...category, id }
     } catch (error) {
+      console.log(error) // TODO
       commit('setError', error)
       throw error
     }
   },
   async createCategory({ commit, dispatch }, { title, limit }) {
     try {
-      const uid = await dispatch('getUserId')
-      const { key = '' } = await firebase
-        .database()
+      // TODO const uid = await dispatch('auth/getUserId')
+      const uid = await this.$fire.auth.currentUser.uid
+      const { key = '' } = await this.$fire.database
         .ref(`/users/${uid}/categories`)
         .push({ title, limit })
 
@@ -58,24 +53,24 @@ export const actions = {
         id: key,
       }
     } catch (error) {
+      console.log(error) // TODO
       commit('setError', error)
       throw error
     }
   },
   async updateCategory({ commit, dispatch }, { id, title, limit }) {
     try {
-      const uid = await dispatch('getUserId')
+      // TODO const uid = await dispatch('auth/getUserId')
+      const uid = await this.$fire.auth.currentUser.uid
 
-      await firebase
-        .database()
+      await this.$fire.database
         .ref(`/users/${uid}/categories`)
         .child(id)
         .update({ title, limit })
     } catch (error) {
+      console.log(error) // TODO
       commit('setError', error)
       throw error
     }
   },
 }
-
-// export const getters = {}

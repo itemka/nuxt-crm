@@ -1,8 +1,10 @@
 import Vue from 'vue'
 
-Vue.filter('currency', function (value, currency = 'USD') {
+export function currencyFilter(value, currency = 'USD') {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,
   }).format(value)
-})
+}
+
+Vue.filter('currency', currencyFilter)

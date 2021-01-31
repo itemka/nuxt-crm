@@ -1,10 +1,11 @@
 <template>
-  <!-- <div>
+  <div>
     <div class="page-title">
       <h3>{{ 'Title_NewRecord' | localize }}</h3>
     </div>
-    <Loader v-if="loading" />
-    <p v-else-if="!categories.length" class="center">
+    <!-- <Loader v-if="loading" /> -->
+    <!-- <p v-else-if="!categories.length" class="center"> -->
+    <p v-if="!categories.length" class="center">
       {{
         'Message_CategoriesAreEmpty' | localize
       }} <router-link to="/categories">{{
@@ -86,103 +87,107 @@
         {{ 'Create' | localize }} <i class="material-icons right">send</i>
       </button>
     </form>
-  </div> -->
+  </div>
 </template>
 
 <script>
-// import { mapGetters, mapActions } from 'vuex'
-// import { required, minValue } from 'vuelidate/lib/validators'
-// import M from 'materialize-css'
+import { mapGetters, mapActions } from 'vuex'
+import { required, minValue } from 'vuelidate/lib/validators'
 
-// export default {
-//   name: 'Record',
-//   metaInfo() {
-//     return {
-//       title: this.$getMetaTitle('Menu_NewRecord')
-//     }
-//   },
-//   data: () => ({
-//     select: null,
-//     categories: [],
-//     loading: true,
-//     current: null,
-//     type: 'outcome',
-//     amount: 1,
-//     description: ''
-//   }),
-//   validations: {
-//     amount: {
-//       minValue: minValue(1)
-//     },
-//     description: {
-//       required,
-//     }
-//   },
-//   async mounted() {
-//     try {
-//       this.categories = await this.$store.dispatch('fetchCategories')
-//       this.loading = false
+export default {
+  name: 'Record',
+  head() {
+    return {
+      title: this.$getMetaTitle('Menu_NewRecord')
+    }
+  },
+  data: () => ({
+    select: null,
+    categories: [],
+    // loading: true,
+    current: null,
+    type: 'outcome',
+    amount: 1,
+    description: ''
+  }),
+  validations: {
+    amount: {
+      minValue: minValue(1)
+    },
+    description: {
+      required,
+    }
+  },
+  async mounted() {
+    try {
+      this.categories = await this.$store.dispatch('category/fetchCategories')
+      // this.loading = false
 
-//       if (this.categories.length) {
-//         this.current = this.categories[0].id
-//       }
+      if (this.categories.length) {
+        this.current = this.categories[0].id
+      }
 
-//       setTimeout(() => {
-//         this.select = M.FormSelect.init(this.$refs.select)
-//         M.updateTextFields()
-//       }, 0)
-//     } catch (error) {}
-//   },
-//   destroy() {
-//     if (this.select && this.select.destroy) {
-//       this.select.destroy()
-//     }
-//   },
-//   computed: {
-//     ...mapGetters(['info']),
-//     canCreate() {
-//       if (this.type === 'income') {
-//         return true
-//       }
+      setTimeout(() => {
+        this.select = this.$formSelect(this.$refs.select)
+        this.$updateTextFields()
+      }, 0)
+    } catch (error) {}
+  },
+  destroy() {
+    if (this.select && this.select.destroy) {
+      this.select.destroy()
+    }
+  },
+  computed: {
+    ...mapGetters({
+      info: 'info/getInfo'
+    }),
+    canCreate() {
+      if (this.type === 'income') {
+        return true
+      }
 
-//       return this.info.bill >= this.amount
-//     }
-//   },
-//   methods: {
-//     ...mapActions(['createRecord', 'updateInfo']),
-//     async handleSubmit() {
-//       try {
-//         if (this.$v.$invalid) {
-//           this.$v.$touch()
+      return this.info.bill >= this.amount
+    }
+  },
+  methods: {
+    ...mapActions({
+      createRecord: 'record/createRecord',
+      updateInfo: 'info/updateInfo'
+    }),
+    async handleSubmit() {
+      try {
+        if (this.$v.$invalid) {
+          this.$v.$touch()
 
-//           return
-//         }
+          return
+        }
 
-//         if (this.canCreate) {
-//           await this.createRecord({
-//             categoryId: this.current,
-//             amount: this.amount,
-//             description: this.description,
-//             type: this.type,
-//             date: new Date().toJSON()
-//           })
+        if (this.canCreate) {
+          await this.createRecord({
+            categoryId: this.current,
+            amount: this.amount,
+            description: this.description,
+            type: this.type,
+            date: new Date().toJSON()
+          })
 
-//           await this.updateInfo({
-//             bill: this.type === 'income'
-//               ? this.info.bill + this.amount
-//               : this.info.bill - this.amount
-//           })
+          await this.updateInfo({
+            bill: this.type === 'income'
+              ? this.info.bill + this.amount
+              : this.info.bill - this.amount
+          })
 
-//           this.$message('Message_RecordCreated')
-//           this.amount = 1
-//           this.description = ''
-//           this.$v.reset()
-//         } else {
-//           this.$message('Message_InsufficientFundsInTheAccount')
-//           this.$message(`(${this.amount - this.info.bill})`)
-//         }
-//       } catch (error) {}
-//     }
-//   }
-// }
+          this.$message('Message_RecordCreated')
+          this.amount = 1
+          this.description = ''
+          this.$v.reset()
+        } else {
+          this.$message('Message_InsufficientFundsInTheAccount')
+          this.$message(`(${this.amount - this.info.bill})`)
+        }
+      } catch (error) {}
+    }
+  }
+}
 </script>

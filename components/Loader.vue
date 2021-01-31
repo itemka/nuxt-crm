@@ -1,5 +1,5 @@
 <template>
-  <!-- <div class="app-loader">
+  <div class="app-loader">
     <div class="preloader-wrapper active">
       <div class="spinner-layer" :class="color">
         <div class="circle-clipper left">
@@ -11,22 +11,22 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 </template>
 
 <script>
-// export default {
-//   data: () => ({
-//     colors: [
-//       'spinner-red-only',
-//       'spinner-blue-only',
-//       'spinner-green-only'
-//     ]
-//   }),
-//   computed: {
-//     color() {
-//       return this.colors[Math.floor(Math.random() * 3)]
-//     }
-//   }
-// }
+export default {
+  data: () => ({
+    colors: [
+      'spinner-red-only',
+      'spinner-blue-only',
+      'spinner-green-only'
+    ]
+  }),
+  computed: {
+    color() {
+      return this.colors[Math.floor(Math.random() * 3)]
+    }
+  }
+}
 </script>

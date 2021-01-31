@@ -1,5 +1,5 @@
 <template>
-  <!-- <div>
+  <div :key="Object.keys(info).length">
     <div class="page-title">
       <h3>{{ 'Profile' | localize }}</h3>
     </div>
@@ -31,63 +31,76 @@
         {{ 'Update' | localize }} <i class="material-icons right">send</i>
       </button>
     </form>
-  </div> -->
+  </div>
 </template>
 
 <script>
-// import { mapGetters, mapActions } from 'vuex'
-// import { required } from 'vuelidate/lib/validators'
-// import M from 'materialize-css'
+import { mapGetters, mapActions } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
 
-// export default {
-//   name: 'Profile',
-//   metaInfo() {
-//     return {
-//       title: this.$getMetaTitle('Profile')
-//     }
-//   },
-//   data: () => ({
-//     name: '',
-//     isEnLocale: true
-//   }),
-//   validations: {
-//     name: {
-//       required
-//     }
-//   },
-//   computed: mapGetters(['info']),
-//   mounted() {
-//     this.name = this.info.name
-//     this.isEnLocale = this.info.locale === 'en-US'
+export default {
+  name: 'Profile',
+  head() {
+    return {
+      title: this.$getMetaTitle('Profile')
+    }
+  },
+  data: () => ({
+    name: '',
+    isEnLocale: true
+  }),
+  validations: {
+    name: {
+      required
+    }
+  },
+  computed: {
+    ...mapGetters({
+      info: 'info/getInfo'
+    })
+  },
+  watch: {
+    info() {
+      this.start()
+    }
+  },
+  mounted() {
+    this.start()
+  },
+  methods: {
+    ...mapActions({
+      updateInfo: 'info/updateInfo'
+    }),
+    start() {
+      this.name = this.info.name
+      this.isEnLocale = this.info.locale === 'en-US'
 
-//     setTimeout(() => {
-//       M.updateTextFields()
-//     }, 0)
-//   },
-//   methods: {
-//     ...mapActions(['updateInfo']),
-//     async handleSubmit() {
-//       try {
-//         if (this.$v.$invalid) {
-//           this.$v.$touch()
+      setTimeout(() => {
+        this.$updateTextFields()
+      }, 0)
+    },
+    async handleSubmit() {
+      try {
+        if (this.$v.$invalid) {
+          this.$v.$touch()
 
-//           return
-//         }
+          return
+        }
 
-//         await this.updateInfo({
-//           name: this.name,
-//           locale: this.isEnLocale ? 'en-US' : 'ru-RU'
-//         })
+        await this.updateInfo({
+          name: this.name,
+          locale: this.isEnLocale ? 'en-US' : 'ru-RU'
+        })
 
-//         this.$message('Message_ProfileInfoUpdated')
-//       } catch (error) {}
-//     }
-//   }
-// }
+        this.$message('Message_ProfileInfoUpdated')
+      } catch (error) {}
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-// .switch {
-//   margin-bottom: 2rem;
-// }
+.switch {
+  margin-bottom: 2rem;
+}
 </style>

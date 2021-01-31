@@ -2,8 +2,10 @@ import Vue from 'vue'
 import { LOCALES } from '@/utils/constants'
 
 export function localizeFilter(store, key) {
+  const locale = store.getters['info/getInfo'].locale || null
+
   return (
-    LOCALES[store.getters['info/getInfo'].locale.substr(0, 2) || 'en'][key] ||
+    LOCALES[(locale && locale.substr(0, 2)) || 'en'][key] ||
     `[Localize error]: key ${key} not found`
   )
 }

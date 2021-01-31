@@ -1,11 +1,12 @@
 <template>
-  <!-- <div>
+  <div>
     <div class="page-title">
       <h3>{{ 'Title_Planning' | localize }}</h3>
       <h4>{{ info.bill | currency }}</h4>
     </div>
-    <Loader v-if="loading" />
-    <p v-else-if="!categories.length" class="center">
+    <!-- <Loader v-if="loading" /> -->
+    <!-- <p v-else-if="!categories.length" class="center"> -->
+    <p v-if="!categories.length" class="center">
       {{
         'Message_CategoriesAreEmpty' | localize
       }} <router-link to="/categories">{{
@@ -30,64 +31,68 @@
         </div>
       </div>
     </section>
-  </div> -->
+  </div>
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
-// import currencyFilter from '@/filters/currency.filter'
-// import localizeFilter from '@/filters/localize.filter'
+import { mapGetters } from 'vuex'
+import { currencyFilter } from '@/filters/currency'
+import { localizeFilter } from '@/filters/localize'
 
-// export default {
-//   name: 'Planning',
-//   metaInfo() {
-//     return {
-//       title: this.$getMetaTitle('Menu_Planning')
-//     }
-//   },
-//   data: () => ({
-//     categories: [],
-//     loading: true
-//   }),
-//   computed: mapGetters(['info']),
-//   async mounted() {
-//     try {
-//       const records = await this.$store.dispatch('fetchRecords')
-//       const categories = await this.$store.dispatch('fetchCategories')
+export default {
+  name: 'Planning',
+  head() {
+    return {
+      title: this.$getMetaTitle('Menu_Planning')
+    }
+  },
+  data: () => ({
+    categories: [],
+    // loading: true
+  }),
+  computed: mapGetters({
+    info: 'info/getInfo'
+  }),
+  async mounted() {
+    try {
+      const records = await this.$store.dispatch('record/fetchRecords')
+      const categories = await this.$store.dispatch('category/fetchCategories')
 
-//       this.categories = categories.map(category => {
-//         const spend = records
-//           .filter(record => record.categoryId === category.id)
-//           .filter(record => record.type === 'outcome')
-//           .reduce((acc, record) => {
-//             return acc += +record.amount
-//           }, 0)
+      console.log({records, categories})
 
-//         const percent = 100 * spend / category.limit
-//         const progressPercent = percent > 100 ? 100 : percent
-//         const progressColor = percent < 60
-//           ? 'green'
-//           : percent < 100
-//             ? 'yellow'
-//             : 'red'
-//         const tooltipValue = category.limit - spend
-//         const tooltip = `${
-//           localizeFilter(tooltipValue < 0 ? 'Message_ExcessBy' : 'Message_Leftover')
-//         } ${
-//           currencyFilter(Math.abs(tooltipValue))
-//         }`
+      this.categories = categories.map(category => {
+        const spend = records
+          .filter(record => record.categoryId === category.id)
+          .filter(record => record.type === 'outcome')
+          .reduce((acc, record) => {
+            return acc += +record.amount
+          }, 0)
 
-//         return {
-//           ...category,
-//           progressPercent,
-//           progressColor,
-//           spend,
-//           tooltip
-//         }
-//       })
+        const percent = 100 * spend / category.limit
+        const progressPercent = percent > 100 ? 100 : percent
+        const progressColor = percent < 60
+          ? 'green'
+          : percent < 100
+            ? 'yellow'
+            : 'red'
+        const tooltipValue = category.limit - spend
+        const tooltip = `${
+          localizeFilter(this.$store, tooltipValue < 0 ? 'Message_ExcessBy' : 'Message_Leftover')
+        } ${
+          currencyFilter(Math.abs(tooltipValue))
+        }`
 
-//       this.loading = false
-//     } catch (error) {}
-//   }
-// }
+        return {
+          ...category,
+          progressPercent,
+          progressColor,
+          spend,
+          tooltip
+        }
+      })
+
+      // this.loading = false
+    } catch (error) {}
+  }
+}
 </script>

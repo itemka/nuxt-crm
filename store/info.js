@@ -1,9 +1,5 @@
-import firebase from 'firebase/app'
-
 export const state = () => ({
-  info: {
-    locale: 'en-EN', // TODO remove it
-  },
+  info: {},
 })
 
 export const mutations = {
@@ -18,27 +14,31 @@ export const mutations = {
 export const actions = {
   async fetchInfo({ commit, dispatch }) {
     try {
-      const uid = await dispatch('getUserId')
+      // TODO const uid = await dispatch('auth/getUserId')
+      const uid = await this.$fire.auth.currentUser.uid
       const info =
         (
-          await firebase.database().ref(`/users/${uid}/info`).once('value')
+          await this.$fire.database.ref(`/users/${uid}/info`).once('value')
         ).val() || {}
 
       commit('setInfo', info)
     } catch (error) {
+      console.log(error) // TODO
       commit('setError')
       throw error
     }
   },
   async updateInfo({ commit, dispatch, getters }, toUpdate) {
     try {
-      const uid = await dispatch('getUserId')
+      // TODO // const uid = await dispatch('auth/getUserId')
+      const uid = await this.$fire.auth.currentUser.uid
       const updatedData = { ...getters.info, ...toUpdate }
 
-      await firebase.database().ref(`/users/${uid}/info`).update(updatedData)
+      await this.$fire.database.ref(`/users/${uid}/info`).update(updatedData)
 
       commit('setInfo', updatedData)
     } catch (error) {
+      console.log(error) // TODO
       commit('setError')
       throw error
     }
@@ -46,5 +46,5 @@ export const actions = {
 }
 
 export const getters = {
-  getInfo: (state) => state.info,
+  getInfo: ({ info }) => info,
 }

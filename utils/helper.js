@@ -24,3 +24,6 @@ export const getRandomColors = (array) =>
 
     return acc
   }, {})
+
+export const isDev = (env = process.env.NODE_ENV) =>
+  !['production'].includes(env)

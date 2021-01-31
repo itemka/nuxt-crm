@@ -1,5 +1,5 @@
 <template>
-  <!-- <div class="col s12 m6 l8">
+  <div class="col s12 m6 l8">
     <div class="card orange darken-3 bill-card">
       <div class="card-content white-text">
         <div class="card-header">
@@ -26,24 +26,24 @@
         </table>
       </div>
     </div>
-  </div> -->
+  </div>
 </template>
 
 <script>
-// export default {
-//   props: ['rates', 'date'],
-//   data: () => ({
-//     currencies: ['USD', 'EUR', 'BYN']
-//   }),
-//   computed: {
-//     base() {
-//       return 1 / (this.rates['USD'] / this.rates['EUR'])
-//     }
-//   },
-//   methods: {
-//     getCurrency(currency) {
-//       return this.base * this.rates[currency]
-//     }
-//   }
-// }
+export default {
+  props: ['rates', 'date'],
+  data: () => ({
+    currencies: ['USD', 'EUR', 'BYN']
+  }),
+  computed: {
+    base() {
+      return 1 / (this.rates['USD'] / this.rates['EUR'])
+    }
+  },
+  methods: {
+    getCurrency(currency) {
+      return this.base * this.rates[currency]
+    }
+  }
+}
 </script>

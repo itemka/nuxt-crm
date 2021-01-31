@@ -1,22 +1,23 @@
-import firebase from 'firebase/app'
-
 export const actions = {
   async createRecord({ dispatch, commit }, record) {
     try {
-      const uid = await dispatch('getUserId')
+      // TODO const uid = await dispatch('auth/getUserId')
+      const uid = await this.$fire.auth.currentUser.uid
 
-      return await firebase.database().ref(`/users/${uid}/records`).push(record)
+      return await this.$fire.database.ref(`/users/${uid}/records`).push(record)
     } catch (error) {
+      console.log('error', error)
       commit('setError', error)
       throw error
     }
   },
   async fetchRecords({ dispatch, commit }) {
     try {
-      const uid = await dispatch('getUserId')
+      // TODO const uid = await dispatch('auth/getUserId')
+      const uid = await this.$fire.auth.currentUser.uid
       const records =
         (
-          await firebase.database().ref(`/users/${uid}/records`).once('value')
+          await this.$fire.database.ref(`/users/${uid}/records`).once('value')
         ).val() || {}
 
       return Object.keys(records).map((key) => ({
@@ -24,17 +25,18 @@ export const actions = {
         id: key,
       }))
     } catch (error) {
+      console.log('error', error)
       commit('setError', error)
       throw error
     }
   },
   async fetchRecordById({ dispatch, commit }, id) {
     try {
-      const uid = await dispatch('getUserId')
+      // TODO const uid = await dispatch('auth/getUserId')
+      const uid = await this.$fire.auth.currentUser.uid
       const record =
         (
-          await firebase
-            .database()
+          await this.$fire.database
             .ref(`/users/${uid}/records`)
             .child(id)
             .once('value')
@@ -42,6 +44,7 @@ export const actions = {
 
       return { ...record, id }
     } catch (error) {
+      console.log('error', error)
       commit('setError', error)
       throw error
     }
